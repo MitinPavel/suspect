@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Pavlo Mitin"]
   spec.email         = ["mitin.pavel@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{Selects a subset of spec files to be run based on previous failures.}
+  spec.description   = %q{Gathers spec failures revealing relationship between files in project. Selects a subset of spec files to be run taking previous failures into account.}
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"
 

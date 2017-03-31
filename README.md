@@ -22,7 +22,28 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+# Gemfile
+gem 'suspect', :path => '/home/pm/projects/suspect'
+```
+
+```ruby
+# spec/spec_helper.rb
+require 'suspect/rspec_listener'
+
+RSpec.configure do |config|
+
+  ::Suspect::RSpecListener.setup_using config
+  
+  # ...
+end  
+```
+
+## Assumptions
+
+* Your project uses:
+  * Git
+  * RSpec
 
 ## Development
 
