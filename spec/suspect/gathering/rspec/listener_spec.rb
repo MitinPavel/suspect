@@ -15,24 +15,42 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
   end
 
   describe '#stop' do
+    RSpec::Matchers.define :append_to_storage do |appender|
+      match do |actual|
+        expect(appender).to receive(:append).with(instance_of(::Suspect::Gathering::RunInfo)) do |run_info|
+          @expected_run_info_data.each do |attribute, value|
+            expect(run_info.public_send(attribute)).to eq(value)
+          end
+        end
+
+        actual.call
+
+        true
+      end
+
+      chain(:with) do |options|
+        @expected_run_info_data = options
+      end
+
+      def supports_block_expectations?
+        true
+      end
+    end
+
     let(:listener) { described_class.new(file_tree, storage_appender) }
 
     it 'stores file paths of failed examples' do
-      expect(storage_appender).to receive(:append) do |run_info|
-        expect(run_info.failed_files).to eq(%w(/path/to/a_spec.rb /path/to/b_spec.rb))
-      end
-
-      listener.stop examples_notification(failed_files: %w(/path/to/a_spec.rb /path/to/b_spec.rb))
+      expect do
+        listener.stop examples_notification(failed_files: %w(/path/to/a_spec.rb /path/to/b_spec.rb))
+      end.to append_to_storage(storage_appender).with failed_files: %w(/path/to/a_spec.rb /path/to/b_spec.rb)
     end
 
     it 'stores file paths of modified files' do
       allow(file_tree).to receive(:modified_files) { %w(/path/to/a.rb /path/to/b.rb) }
 
-      expect(storage_appender).to receive(:append) do |run_info|
-        expect(run_info.modified_files).to eq(%w(/path/to/a.rb /path/to/b.rb))
-      end
-
-      listener.stop examples_notification(failed_files: %w(/path/to/a_spec.rb))
+      expect do
+        listener.stop examples_notification
+      end.to append_to_storage(storage_appender).with modified_files: %w(/path/to/a.rb /path/to/b.rb)
     end
 
     context '[no failed examples]' do
@@ -43,7 +61,7 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
       end
     end
 
-    def examples_notification(failed_files: [])
+    def examples_notification(failed_files: %w(/path/to/a_spec.rb))
       instance_double(::RSpec::Core::Notifications::ExamplesNotification,
                       failed_examples: failed_files.map { |p| example(p) })
     end
