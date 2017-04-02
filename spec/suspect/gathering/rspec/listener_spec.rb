@@ -1,9 +1,10 @@
 require 'spec_helper'
 require 'suspect/gathering/rspec/listener'
 require 'suspect/storage/appender'
+require 'suspect/file_tree/git/snapshot'
 
 RSpec.describe Suspect::Gathering::RSpec::Listener do
-  let(:file_tree) { double('file_tree') }
+  let(:file_tree) { instance_double(::Suspect::FileTree::Git::Snapshot, modified_files: []) }
   let(:storage_appender) { instance_double(::Suspect::Storage::Appender) }
 
   describe '#notification_names' do
@@ -24,6 +25,16 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
       listener.stop examples_notification(failed_files: %w(/path/to/a_spec.rb /path/to/b_spec.rb))
     end
 
+    it 'stores file paths of modified files' do
+      allow(file_tree).to receive(:modified_files) { %w(/path/to/a.rb /path/to/b.rb) }
+
+      expect(storage_appender).to receive(:append) do |run_info|
+        expect(run_info.modified_files).to eq(%w(/path/to/a.rb /path/to/b.rb))
+      end
+
+      listener.stop examples_notification(failed_files: %w(/path/to/a_spec.rb))
+    end
+
     context '[no failed examples]' do
       let(:storage_appender) { instance_double(::Suspect::Storage::Appender) }
 
@@ -32,7 +43,7 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
       end
     end
 
-    def examples_notification(failed_files:)
+    def examples_notification(failed_files: [])
       instance_double(::RSpec::Core::Notifications::ExamplesNotification,
                       failed_examples: failed_files.map { |p| example(p) })
     end

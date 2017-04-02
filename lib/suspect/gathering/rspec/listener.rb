@@ -19,22 +19,26 @@ module Suspect
         end
 
         def stop(notification)
-          run_info = build_run_info(file_paths: file_paths(notification))
+          run_info = build_run_info(failed_files: failed_files(notification),
+                                    modified_files: file_tree.modified_files)
 
           if run_info.failed_files.any?
-            @storage_appender.append run_info
+            storage_appender.append run_info
           end
         end
 
         private
 
-        def build_run_info(file_paths:)
+        attr_reader :file_tree, :storage_appender
+
+        def build_run_info(failed_files:, modified_files:)
           ::Suspect::Gathering::RunInfo.new.tap do |info|
-            info.failed_files = file_paths
+            info.failed_files = failed_files
+            info.modified_files = modified_files
           end
         end
 
-        def file_paths(notification)
+        def failed_files(notification)
           notification.failed_examples.map(&:file_path)
         end
       end
