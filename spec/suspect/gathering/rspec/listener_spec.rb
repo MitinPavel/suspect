@@ -30,7 +30,7 @@ module StorageAppenderHelpers
 end
 
 RSpec.describe Suspect::Gathering::RSpec::Listener do
-  let(:file_tree) { instance_double(::Suspect::FileTree::Git::Snapshot, modified_files: []) }
+  let(:file_tree) { instance_double(::Suspect::FileTree::Git::Snapshot, modified_files: [], commit_hash: 'fake_hash') }
   let(:storage_appender) { instance_double(::Suspect::Storage::Appender) }
 
   describe '#stop' do
@@ -42,6 +42,14 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
       expect do
         listener.stop examples_notification(failed_files: %w(/path/to/a_spec.rb /path/to/b_spec.rb))
       end.to append_to(storage_appender).with failed_files: %w(/path/to/a_spec.rb /path/to/b_spec.rb)
+    end
+
+    it 'stores a hash of the current git commit' do
+      allow(file_tree).to receive(:commit_hash) { 'c037805ab7f514c9eq7838eb4f702af0fd1f0e62' }
+
+      expect do
+        listener.stop examples_notification
+      end.to append_to(storage_appender).with commit_hash: 'c037805ab7f514c9eq7838eb4f702af0fd1f0e62'
     end
 
     it 'stores file paths of modified files' do

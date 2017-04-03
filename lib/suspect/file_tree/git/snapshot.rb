@@ -1,3 +1,5 @@
+require_relative './client'
+
 module Suspect
   module FileTree
     module Git
