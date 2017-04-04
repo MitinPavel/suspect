@@ -15,7 +15,7 @@ RSpec.describe Suspect::FileTree::Git::Snapshot do
       allow(git_client).to receive(:modified_files) { "path/to/a.rb\npath/to/b.rb\n" }
 
       snapshot = described_class.new(git_client)
-      expect(snapshot.modified_files).to match_array(%w(path/to/a.rb path/to/b.rb))
+      expect(snapshot.modified_files).to match_array(%w(/path/to/a.rb /path/to/b.rb))
     end
   end
 

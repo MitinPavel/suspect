@@ -9,7 +9,9 @@ module Suspect
         end
 
         def modified_files
-          client.modified_files.split(/\n/)
+          client.modified_files.
+              split(/\n/).
+              map { |path| "/#{path}"}
         end
 
         def commit_hash
