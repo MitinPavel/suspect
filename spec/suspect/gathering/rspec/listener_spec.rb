@@ -74,14 +74,20 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
     context '[files with failed examples]' do
       it 'stores file paths of failed examples' do
         expect do
-          listener.stop examples_notification(failed_files: %w(/path/to/a_spec.rb /path/to/b_spec.rb))
-        end.to append_to(storage_appender).with failed_files: %w(/path/to/a_spec.rb /path/to/b_spec.rb)
+          listener.stop examples_notification(failed_files: %w(/path/to/a_spec.rb))
+        end.to append_to(storage_appender).with failed_files: %w(/path/to/a_spec.rb)
       end
 
-      it 'stores unique file paths' do
+      it 'removes path duplicates' do
         expect do
           listener.stop examples_notification(failed_files: %w(/path/to/a_spec.rb /path/to/a_spec.rb /path/to/b_spec.rb))
         end.to append_to(storage_appender).with failed_files: %w(/path/to/a_spec.rb /path/to/b_spec.rb)
+      end
+
+      it 'sorts file paths' do
+        expect do
+          listener.stop examples_notification(failed_files: %w(/path/to/c.rb /path/to/a.rb /path/to/b.rb))
+        end.to append_to(storage_appender).with failed_files: %w(/path/to/a.rb /path/to/b.rb /path/to/c.rb)
       end
 
       context '[no failed examples]' do
