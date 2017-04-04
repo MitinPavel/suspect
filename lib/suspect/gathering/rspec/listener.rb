@@ -41,7 +41,7 @@ module Suspect
         end
 
         def failed_files(notification)
-          notification.failed_examples.map(&:file_path)
+          notification.failed_examples.map(&:file_path).sort.uniq
         end
       end
     end
