@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'suspect/file_tree/git/snapshot'
-require 'suspect/file_tree/git/client'
 
 RSpec.describe Suspect::FileTree::Git::Snapshot do
   let(:git_client) { instance_double(::Suspect::FileTree::Git::Client, modified_files: '', commit_hash: 'fake_hash') }

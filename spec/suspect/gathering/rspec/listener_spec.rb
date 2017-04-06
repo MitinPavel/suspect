@@ -1,8 +1,5 @@
 require 'spec_helper'
 require_relative '../../../support/matchers/storage_appender_matchers'
-require 'suspect/gathering/rspec/listener'
-require 'suspect/storage/appender'
-require 'suspect/file_tree/git/snapshot'
 
 RSpec.describe Suspect::Gathering::RSpec::Listener do
   let(:file_tree) { instance_double(::Suspect::FileTree::Git::Snapshot, modified_files: [], commit_hash: 'fake_hash') }
