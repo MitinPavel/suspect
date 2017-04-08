@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["mitin.pavel@gmail.com"]
 
   spec.summary       = %q{Selects a subset of spec files to be run based on previous failures.}
-  spec.description   = %q{Gathers spec failures revealing relationship between files in project. Selects a subset of spec files to be run taking previous failures into account.}
+  spec.description   = %q{Gathers spec failures revealing relationship between files in a project. Selects a subset of spec files to be run taking previous failures into account.}
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"
 

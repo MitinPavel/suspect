@@ -1,6 +1,7 @@
 require_relative './gathering/rspec/listener'
 require_relative './file_tree/git/snapshot'
 require_relative './storage/appender'
+require_relative './storage/dir_path'
 
 module Suspect
   ##
@@ -20,7 +21,8 @@ module Suspect
 
     def register_listener(reporter)
       file_tree = ::Suspect::FileTree::Git::Snapshot.new
-      storage = ::Suspect::Storage::Appender.new
+      path = ::Suspect::Storage::DirPath.new('.', Time.now.utc)
+      storage = ::Suspect::Storage::Appender.new(path: path)
       listener = ::Suspect::Gathering::RSpec::Listener.new(file_tree, storage)
 
       reporter.register_listener listener, *listener.notification_names
