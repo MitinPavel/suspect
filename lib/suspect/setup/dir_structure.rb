@@ -10,7 +10,13 @@ module Suspect
       end
 
       def build
-        file_helper.mkdir root_path + MAIN_DIR_NAME + STORAGE_DIR_NAME
+        file_helper.mkdir storage_path
+
+        self
+      end
+
+      def storage_path
+        root_path + MAIN_DIR_NAME + STORAGE_DIR_NAME
       end
 
       private
