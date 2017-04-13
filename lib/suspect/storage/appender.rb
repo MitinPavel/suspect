@@ -27,7 +27,7 @@ module Suspect
 
       #TODO Extract dir creation.
       def create_full_path
-        FileUtils::mkdir_p path.to_s
+        ::FileUtils::mkdir_p path.to_s
 
         path
       end

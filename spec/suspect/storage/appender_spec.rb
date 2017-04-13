@@ -3,7 +3,7 @@ require 'suspect/storage/appender'
 
 RSpec.describe Suspect::Storage::Appender do
   describe '#append' do
-    before { allow(FileUtils).to receive :mkdir_p }
+    before { allow(::FileUtils).to receive(:mkdir_p) }
 
     let(:run_info) { instance_double(::Suspect::Gathering::RunInfo, to_s: 'serialized run info') }
     let(:writer) { instance_double(::Suspect::Storage::FlockWriter) }
