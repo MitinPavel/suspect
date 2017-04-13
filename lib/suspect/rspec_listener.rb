@@ -22,7 +22,7 @@ module Suspect
     def register_listener(reporter)
       file_tree = ::Suspect::FileTree::Git::Snapshot.new
       path = ::Suspect::Storage::DirPath.new('.', Time.now.utc)
-      storage = ::Suspect::Storage::Appender.new(path: path, actor_id: rand(99999).to_s)
+      storage = ::Suspect::Storage::Appender.new(path: path, collector_id: rand(99999).to_s)
       listener = ::Suspect::Gathering::RSpec::Listener.new(file_tree, storage)
 
       reporter.register_listener listener, *listener.notification_names

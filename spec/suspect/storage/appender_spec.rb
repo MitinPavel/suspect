@@ -11,15 +11,15 @@ RSpec.describe Suspect::Storage::Appender do
     it 'appends serialized run info' do
       expect(writer).to receive(:write).with anything, 'serialized run info'
 
-      appender = described_class.new(path: '.', writer: writer, actor_id: 'some id')
+      appender = described_class.new(path: '.', writer: writer, collector_id: 'some id')
       appender.append run_info
     end
 
-    it 'compose a storage file path concatenating the path, the storage version and the actor id' do
+    it 'compose a storage file path concatenating the path, the storage version and the collector id' do
       expect(described_class::VERSION).to eq('1')
       expect(writer).to receive(:write).with '/a/path/to/store/12345-1.ss', anything
 
-      appender = described_class.new(path: '/a/path/to/store', writer: writer, actor_id: '12345')
+      appender = described_class.new(path: '/a/path/to/store', writer: writer, collector_id: '12345')
       appender.append run_info
     end
   end

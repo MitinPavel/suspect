@@ -11,11 +11,11 @@ module Suspect
       def initialize(opts)
         @writer = opts[:writer] || FlockWriter.new
         @path = opts[:path] || fail(ArgumentError, 'No path found')
-        @actor_id = opts[:actor_id] || fail(ArgumentError, 'No actor_id found')
+        @collector_id = opts[:collector_id] || fail(ArgumentError, 'No collector_id found')
       end
 
       def append(run_info)
-        filename = "#{create_full_path}/#{actor_id}-#{VERSION}.ss"
+        filename = "#{create_full_path}/#{collector_id}-#{VERSION}.ss"
         content = run_info.to_s
 
         writer.write filename, content
@@ -23,7 +23,7 @@ module Suspect
 
       private
 
-      attr_reader :writer, :path, :actor_id
+      attr_reader :writer, :path, :collector_id
 
       #TODO Extract dir creation.
       def create_full_path
