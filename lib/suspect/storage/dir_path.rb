@@ -6,11 +6,15 @@ module Suspect
         @clock = clock
       end
 
-      def to_s
+      def expand_path
         File.join(base_path,
                   format(clock.year),
                   format(clock.month),
                   format(clock.day))
+      end
+
+      def to_s
+        expand_path
       end
 
       private

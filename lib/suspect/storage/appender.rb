@@ -1,7 +1,6 @@
 require 'fileutils'
 
-require_relative '../file_utils/flock_writer'
-require_relative 'dir_path'
+require_relative './../file_utils/flock_writer'
 
 module Suspect
   module Storage
@@ -9,27 +8,25 @@ module Suspect
       VERSION = '1'
 
       def initialize(opts)
-        @writer = opts[:writer] || FlockWriter.new
-        @path = opts[:path] || fail(ArgumentError, 'No path found')
+        @writer = opts[:writer] || ::Suspect::FileUtils::FlockWriter.new
+        @dir_helper = opts[:dir_helper] ||fail(ArgumentError, 'No dir_helper found')
+        @dir_path = opts[:dir_path] || fail(ArgumentError, 'No dir_path found')
         @collector_id = opts[:collector_id] || fail(ArgumentError, 'No collector_id found')
       end
 
       def append(run_info)
-        filename = "#{create_full_path}/#{collector_id}-#{VERSION}.ss"
-        content = run_info.to_s
+        dir_helper.mkdir dir_path.expand_path
 
-        writer.write filename, content
+        writer.write filename,
+                     run_info.to_s
       end
 
       private
 
-      attr_reader :writer, :path, :collector_id
+      attr_reader :writer, :dir_helper, :dir_path, :collector_id
 
-      #TODO Extract dir creation.
-      def create_full_path
-        ::FileUtils::mkdir_p path.to_s
-
-        path
+      def filename
+        "#{dir_path.expand_path}/#{collector_id}-#{VERSION}.ss"
       end
     end
   end

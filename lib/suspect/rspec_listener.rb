@@ -32,7 +32,7 @@ module Suspect
 
       storage_path = ::Suspect::Storage::DirPath.new(dir_structure.storage_path, Time.now.utc)
       collector_id = file_helper.read(dir_structure.collector_id_path)
-      storage = ::Suspect::Storage::Appender.new(path: storage_path, collector_id: collector_id)
+      storage = ::Suspect::Storage::Appender.new(dir_path: storage_path, dir_helper: file_helper, collector_id: collector_id)
       file_tree = ::Suspect::FileTree::Git::Snapshot.new
       listener = ::Suspect::Gathering::RSpec::Listener.new(file_tree, storage)
 
