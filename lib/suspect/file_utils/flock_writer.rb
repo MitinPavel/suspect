@@ -1,5 +1,5 @@
 module Suspect
-  module Storage
+  module FileUtils
     class FlockWriter
 
       PERMISSIONS = 0644

@@ -6,7 +6,7 @@ RSpec.describe Suspect::Storage::Appender do
     before { allow(::FileUtils).to receive(:mkdir_p) }
 
     let(:run_info) { instance_double(::Suspect::Gathering::RunInfo, to_s: 'serialized run info') }
-    let(:writer) { instance_double(::Suspect::Storage::FlockWriter) }
+    let(:writer) { instance_double(::Suspect::FileUtils::FlockWriter) }
 
     it 'appends serialized run info' do
       expect(writer).to receive(:write).with anything, 'serialized run info'

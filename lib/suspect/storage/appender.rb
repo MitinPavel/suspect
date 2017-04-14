@@ -1,6 +1,6 @@
 require 'fileutils'
 
-require_relative 'flock_writer'
+require_relative '../file_utils/flock_writer'
 require_relative 'dir_path'
 
 module Suspect
