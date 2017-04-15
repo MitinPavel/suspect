@@ -1,4 +1,5 @@
 require 'pathname'
+require 'time'
 
 require_relative './file_utils/idempotent'
 require_relative './setup/collector_id_generator'
@@ -34,7 +35,7 @@ module Suspect
       collector_id = file_helper.read(dir_structure.collector_id_path)
       storage = ::Suspect::Storage::Appender.new(dir_path: storage_path, dir_helper: file_helper, collector_id: collector_id)
       file_tree = ::Suspect::FileTree::Git::Snapshot.new
-      listener = ::Suspect::Gathering::RSpec::Listener.new(file_tree, storage, collector_id)
+      listener = ::Suspect::Gathering::RSpec::Listener.new(file_tree, storage, collector_id, ::Time.now.utc)
 
       reporter.register_listener listener, *listener.notification_names
     end

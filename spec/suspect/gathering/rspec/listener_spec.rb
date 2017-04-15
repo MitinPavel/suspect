@@ -12,17 +12,26 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
   end
   let(:storage_appender) { instance_double(::Suspect::Storage::Appender) }
   let(:collector_id) { 'abcd1234' }
+  let(:clock) { instance_double(::Time, iso8601: '2017-04-15T11:57:27Z') }
 
   describe '#stop' do
     include StorageAppenderMatchers
 
-    let(:listener) { described_class.new(file_tree, storage_appender, collector_id) }
+    let(:listener) { described_class.new(file_tree, storage_appender, collector_id, clock) }
 
     context '[collector_id]' do
       it 'stores collector_id' do
         expect do
           listener.stop examples_notification
         end.to append_to(storage_appender).with collector_id: 'abcd1234'
+      end
+    end
+
+    context '[notified_at]' do
+      it 'stores collector_id' do
+        expect do
+          listener.stop examples_notification
+        end.to append_to(storage_appender).with notified_at: '2017-04-15T11:57:27Z'
       end
     end
 
@@ -97,7 +106,7 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
 
   describe '#notification_names' do
     it 'is only interested in "stop" notification' do
-      listener = described_class.new(file_tree, storage_appender, collector_id)
+      listener = described_class.new(file_tree, storage_appender, collector_id, clock)
       expect(listener.notification_names).to eq(%i(stop))
     end
   end
