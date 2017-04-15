@@ -9,9 +9,10 @@ module Suspect
       # * RSpec::Core::Example#file_path.
       #
       class Listener
-        def initialize(file_tree, storage_appender)
+        def initialize(file_tree, storage_appender, collector_id)
           @file_tree = file_tree
           @storage_appender = storage_appender
+          @collector_id = collector_id
         end
 
         def notification_names
@@ -28,10 +29,11 @@ module Suspect
 
         private
 
-        attr_reader :file_tree, :storage_appender
+        attr_reader :file_tree, :storage_appender, :collector_id
 
         def build_run_info(notification)
           ::Suspect::Gathering::RunInfo.new.tap do |info|
+            info.collector_id = collector_id
             info.failed_files = failed_files(notification)
             info.commit_hash = file_tree.commit_hash
             info.modified_files = file_tree.modified_files

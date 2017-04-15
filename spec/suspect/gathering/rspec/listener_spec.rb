@@ -11,11 +11,20 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
                     patch: 'fake_patch')
   end
   let(:storage_appender) { instance_double(::Suspect::Storage::Appender) }
+  let(:collector_id) { 'abcd1234' }
 
   describe '#stop' do
     include StorageAppenderMatchers
 
-    let(:listener) { described_class.new(file_tree, storage_appender) }
+    let(:listener) { described_class.new(file_tree, storage_appender, collector_id) }
+
+    context '[collector_id]' do
+      it 'stores collector_id' do
+        expect do
+          listener.stop examples_notification
+        end.to append_to(storage_appender).with collector_id: 'abcd1234'
+      end
+    end
 
     context '[commit hash]' do
       it 'stores a hash of the current git commit' do
@@ -88,7 +97,7 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
 
   describe '#notification_names' do
     it 'is only interested in "stop" notification' do
-      listener = described_class.new(file_tree, storage_appender)
+      listener = described_class.new(file_tree, storage_appender, collector_id)
       expect(listener.notification_names).to eq(%i(stop))
     end
   end

@@ -34,7 +34,7 @@ module Suspect
       collector_id = file_helper.read(dir_structure.collector_id_path)
       storage = ::Suspect::Storage::Appender.new(dir_path: storage_path, dir_helper: file_helper, collector_id: collector_id)
       file_tree = ::Suspect::FileTree::Git::Snapshot.new
-      listener = ::Suspect::Gathering::RSpec::Listener.new(file_tree, storage)
+      listener = ::Suspect::Gathering::RSpec::Listener.new(file_tree, storage, collector_id)
 
       reporter.register_listener listener, *listener.notification_names
     end
