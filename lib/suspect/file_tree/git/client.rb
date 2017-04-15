@@ -9,6 +9,10 @@ module Suspect
         def commit_hash
           `git log -1 --format="%H"`
         end
+
+        def diff
+          `git diff`
+        end
       end
     end
   end

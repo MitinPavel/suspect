@@ -4,7 +4,12 @@ require 'suspect/file_tree/git/snapshot'
 require 'suspect/storage/appender'
 
 RSpec.describe Suspect::Gathering::RSpec::Listener do
-  let(:file_tree) { instance_double(::Suspect::FileTree::Git::Snapshot, modified_files: [], commit_hash: 'fake_hash') }
+  let(:file_tree) do
+    instance_double(::Suspect::FileTree::Git::Snapshot,
+                    modified_files: [],
+                    commit_hash: 'fake_hash',
+                    patch: 'fake_patch')
+  end
   let(:storage_appender) { instance_double(::Suspect::Storage::Appender) }
 
   describe '#stop' do
@@ -19,6 +24,16 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
         expect do
           listener.stop examples_notification
         end.to append_to(storage_appender).with commit_hash: 'c037805ab7f514c9eq7838eb4f702af0fd1f0e62'
+      end
+    end
+
+    context '[version control system patch]' do
+      it 'stores a patch string of the current file tree' do
+        allow(file_tree).to receive(:patch) { 'fake patch string' }
+
+        expect do
+          listener.stop examples_notification
+        end.to append_to(storage_appender).with patch: 'fake patch string'
       end
     end
 

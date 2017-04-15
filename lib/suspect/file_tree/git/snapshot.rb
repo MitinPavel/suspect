@@ -18,6 +18,10 @@ module Suspect
           client.commit_hash.sub(/\n\z/, '')
         end
 
+        def patch
+          client.diff
+        end
+
         private
 
         attr_reader :client

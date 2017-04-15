@@ -19,9 +19,7 @@ module Suspect
         end
 
         def stop(notification)
-          run_info = build_run_info(failed_files: failed_files(notification),
-                                    commit_hash: file_tree.commit_hash,
-                                    modified_files: file_tree.modified_files)
+          run_info = build_run_info(notification)
 
           if run_info.failed_files.any?
             storage_appender.append run_info
@@ -32,11 +30,12 @@ module Suspect
 
         attr_reader :file_tree, :storage_appender
 
-        def build_run_info(failed_files:, commit_hash:, modified_files:)
+        def build_run_info(notification)
           ::Suspect::Gathering::RunInfo.new.tap do |info|
-            info.failed_files = failed_files
-            info.commit_hash = commit_hash
-            info.modified_files = modified_files
+            info.failed_files = failed_files(notification)
+            info.commit_hash = file_tree.commit_hash
+            info.modified_files = file_tree.modified_files
+            info.patch = file_tree.patch
           end
         end
 
