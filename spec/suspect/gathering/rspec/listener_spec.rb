@@ -93,12 +93,57 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
       end
     end
 
-    def examples_notification(failed_files: %w(/path/to/a_spec.rb))
-      instance_double(::RSpec::Core::Notifications::ExamplesNotification,
-                      failed_examples: failed_files.map { |p| example(p) })
+    context '[counts]' do
+      context '[failed example count]' do
+        it 'calculates each individual example taking duplication into account' do
+          expect do
+            listener.stop examples_notification(failed_files: %w(a_spec.rb a_spec.rb a_spec.rb b_spec.rb))
+          end.to append_to(storage_appender).with failed_example_count: 4
+        end
+      end
+
+      context '[pending example count]' do
+        it 'stores 0 if no pending examples' do
+          expect do
+            listener.stop examples_notification(pending_files: [])
+          end.to append_to(storage_appender).with pending_example_count: 0
+        end
+
+        it 'calculates each individual example taking duplication into account' do
+          expect do
+            listener.stop examples_notification(pending_files: %w(a_spec.rb a_spec.rb a_spec.rb b_spec.rb))
+          end.to append_to(storage_appender).with pending_example_count: 4
+        end
+      end
+
+      context '[successful example count]' do
+        it 'calculates it as the difference between all example count and failed/pending example count' do
+          failed_examples = %w(/path/to/a_spec.rb).map { |p| example_by(p) }
+          pending_examples = %w(/path/to/a_spec.rb).map { |p| example_by(p) }
+          examples =  %w(/path/to/a_spec.rb /path/to/a_spec.rb /path/to/a_spec.rb).map { |p| example_by(p) }
+
+          expect do
+            listener.stop instance_double(::RSpec::Core::Notifications::ExamplesNotification,
+                                          failed_examples: failed_examples,
+                                          pending_examples: pending_examples,
+                                          examples: examples)
+          end.to append_to(storage_appender).with successful_example_count: 1
+        end
+      end
     end
 
-    def example(file_path)
+    def examples_notification(failed_files: %w(/path/to/a_spec.rb), pending_files: [], successful_files: [])
+      failed_examples = failed_files.map { |p| example_by(p) }
+      pending_examples =  pending_files.map  { |p| example_by(p) }
+      successful_examples =  successful_files.map  { |p| example_by(p) }
+
+      instance_double(::RSpec::Core::Notifications::ExamplesNotification,
+                      failed_examples: failed_examples,
+                      pending_examples: pending_examples,
+                      examples: failed_examples + pending_examples + successful_examples)
+    end
+
+    def example_by(file_path)
       instance_double(::RSpec::Core::Example,
                       file_path: file_path)
     end

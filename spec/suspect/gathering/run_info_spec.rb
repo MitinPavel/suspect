@@ -7,6 +7,9 @@ RSpec.describe Suspect::Gathering::RunInfo do
     let(:data) do
       {'collector_id' => '12345',
        'notified_at' => '2012-03-19T07:22Z',
+       'failed_example_count' => 2,
+       'successful_example_count' => 5,
+       'pending_example_count' => 1,
        'failed_files' => %w(b_spec.rb),
        'modified_files' => %w(a.rb c.rb),
        'commit_hash' => 'fake_hash',
