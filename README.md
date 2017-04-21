@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-```
+```ruby
 # Gemfile
 gem 'suspect', :path => '/home/pm/projects/suspect'
 ```
@@ -37,6 +37,18 @@ RSpec.configure do |config|
   
   # ...
 end  
+```
+
+```ruby
+# lib/tasks/suspect.rake
+
+namespace :suspect do
+  desc 'List suspect test files'
+  task :list do |t, args|
+    #...
+  end
+end
+
 ```
 
 ## Assumptions
