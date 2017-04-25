@@ -15,6 +15,7 @@ module Suspect
                                :failed_files, # An array of files contained failed test examples.
                                :modified_files, # An array of modified files.
 
+                               #TODO Add `branch` member
                                :commit_hash, # A hash of the current Git commit.
                                :patch, # A version control system patch for the current file tree state.
                                :version) # Should be changed each time
