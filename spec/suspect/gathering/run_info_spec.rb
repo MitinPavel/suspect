@@ -12,6 +12,7 @@ RSpec.describe Suspect::Gathering::RunInfo do
        'pending_example_count' => 1,
        'failed_files' => %w(b_spec.rb),
        'modified_files' => %w(a.rb c.rb),
+       'branch' => 'master',
        'commit_hash' => 'fake_hash',
        'patch' => 'fake_patch',
        'version' => '1'}

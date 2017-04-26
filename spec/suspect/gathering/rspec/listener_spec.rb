@@ -6,6 +6,7 @@ require 'suspect/storage/appender'
 RSpec.describe Suspect::Gathering::RSpec::Listener do
   let(:file_tree) do
     instance_double(::Suspect::FileTree::Git::Snapshot,
+                    branch: 'master',
                     modified_files: [],
                     commit_hash: 'fake_hash',
                     patch: 'fake_patch')
@@ -32,6 +33,16 @@ RSpec.describe Suspect::Gathering::RSpec::Listener do
         expect do
           listener.stop examples_notification
         end.to append_to(storage_appender).with notified_at: '2017-04-15T11:57:27Z'
+      end
+    end
+
+    context '[VCS branch]' do
+      it 'stores the current git branch' do
+        allow(file_tree).to receive(:branch) { 'feature_42' }
+
+        expect do
+          listener.stop examples_notification
+        end.to append_to(storage_appender).with branch: 'feature_42'
       end
     end
 

@@ -4,6 +4,15 @@ require 'suspect/file_tree/git/snapshot'
 RSpec.describe Suspect::FileTree::Git::Snapshot do
   let(:git_client) { instance_double(::Suspect::FileTree::Git::Client, modified_files: '', commit_hash: 'fake_hash') }
 
+  describe '#branch' do
+    it 'returns the current Git branch' do
+      allow(git_client).to receive(:branch) { "hotfix\n" }
+
+      snapshot = described_class.new(git_client)
+      expect(snapshot.branch).to eq('hotfix')
+    end
+  end
+
   describe '#modified_files' do
     it 'returns an empty array if no modified files' do
       snapshot = described_class.new(git_client)

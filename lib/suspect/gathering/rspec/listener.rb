@@ -42,6 +42,7 @@ module Suspect
             info.pending_example_count = pending_example_count(notification)
             info.successful_example_count = successful_example_count(notification)
             info.failed_files = failed_files(notification)
+            info.branch = file_tree.branch
             info.commit_hash = file_tree.commit_hash
             info.modified_files = file_tree.modified_files
             info.patch = file_tree.patch

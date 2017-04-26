@@ -8,6 +8,10 @@ module Suspect
           @client = client
         end
 
+        def branch
+          without_new_line(client.branch)
+        end
+
         def modified_files
           client.modified_files.
               split(/\n/).
@@ -15,7 +19,7 @@ module Suspect
         end
 
         def commit_hash
-          client.commit_hash.sub(/\n\z/, '')
+          without_new_line(client.commit_hash)
         end
 
         def patch
@@ -25,6 +29,10 @@ module Suspect
         private
 
         attr_reader :client
+
+        def without_new_line(str)
+          str.sub(/\n\z/, '')
+        end
       end
     end
   end
