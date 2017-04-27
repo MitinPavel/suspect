@@ -10,12 +10,10 @@ module Suspect
       class << self
         def paths
           root_path = ::Pathname.new('.')
-          file_helper = ::Suspect::FileUtils::Idempotent.new
-          collector_id_generator = ::Suspect::Setup::CollectorIdGenerator.new
-          dir_structure = ::Suspect::Setup::DirStructure.new(root_path, collector_id_generator, file_helper).build
-          storage_path = dir_structure.storage_path
-          file_tree = ::Suspect::FileTree::Git::Snapshot.new
+          structure = ::Suspect::Setup::Structure.new(root_path)
+          storage_path = structure.storage_path
           reader = ::Suspect::Storage::Reader.new(storage_path)
+          file_tree = ::Suspect::FileTree::Git::Snapshot.new
 
           Naive::AllFound.new(reader, file_tree).paths
         end

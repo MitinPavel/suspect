@@ -5,7 +5,7 @@ require 'suspect/prediction/naive/all_found'
 RSpec.describe Suspect::Prediction::Default do
   describe '#path' do
     before do
-      allow_any_instance_of(::Suspect::Setup::DirStructure).to receive(:build).and_return OpenStruct.new(storage_path: '.')
+      allow_any_instance_of(::Suspect::Setup::Creator).to receive(:build)
     end
 
     it 'delegates to the default strategy' do

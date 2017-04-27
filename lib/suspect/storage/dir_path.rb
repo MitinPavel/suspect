@@ -1,6 +1,6 @@
 module Suspect
   module Storage
-    class DirPath
+      class DirPath
       def initialize(base_path, clock)
         @base_path = base_path
         @clock = clock
