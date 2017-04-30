@@ -3,13 +3,14 @@ require 'suspect/gathering/run_info'
 module Suspect
   module Storage
     class Reader
-      def initialize(base_path)
+      def initialize(base_path, file_helper)
         @base_path = base_path
+        @file_helper = file_helper
       end
 
       def foreach
-        paths.each do |path|
-          File.open(path).each do |line|
+        storage_file_paths.each do |path|
+          file_helper.read(path) do |line|
             yield run_info_from(line)
           end
         end
@@ -17,10 +18,10 @@ module Suspect
 
       private
 
-      attr_reader :base_path
+      attr_reader :base_path, :file_helper
 
-      def paths
-        Dir.glob("#{base_path}/**/*.ss")
+      def storage_file_paths
+        file_helper.file_paths(base_path).select { |p| p.end_with?('.ss') }
       end
 
       def run_info_from(line)

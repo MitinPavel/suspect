@@ -12,7 +12,8 @@ module Suspect
           root_path = ::Pathname.new('.')
           structure = ::Suspect::Setup::Structure.new(root_path)
           storage_path = structure.storage_path
-          reader = ::Suspect::Storage::Reader.new(storage_path)
+          file_helper = ::Suspect::FileUtils::Idempotent.new
+          reader = ::Suspect::Storage::Reader.new(storage_path, file_helper)
           file_tree = ::Suspect::FileTree::Git::Snapshot.new
 
           Naive::AllFound.new(reader, file_tree).paths

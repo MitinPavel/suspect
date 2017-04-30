@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'tempfile'
+require 'find'
 
 module Suspect
   module FileUtils
@@ -7,8 +8,24 @@ module Suspect
     # A humble object class for file system manipulations
     #
     class Idempotent
-      def mkdir(path)
-        ::FileUtils::mkdir_p path
+      def file_paths(base_path)
+        result = []
+
+        Find.find(base_path) do |path|
+          unless FileTest.directory?(path)
+            result << path
+          end
+        end
+
+        result
+      end
+
+      def read(path, &block)
+        if block_given?
+          ::File.open(path).each &block
+        else
+          ::File.open(path) { |f| f.readline }
+        end
       end
 
       def write(path, content)
@@ -22,8 +39,8 @@ module Suspect
         `mv --no-clobber #{temp_file.path} #{path.expand_path}`
       end
 
-      def read(path)
-        ::File.open(path) { |f| f.readline }
+      def mkdir(path)
+        ::FileUtils::mkdir_p path
       end
     end
   end
