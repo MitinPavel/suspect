@@ -3,7 +3,6 @@ require 'suspect/storage/dir_path'
 
 RSpec.describe Suspect::Storage::DirPath do
   describe '#to_s' do
-    let(:clock) { }
     specify { expect(actual('base/path/', '1 Jan 2017')).to  eq('base/path/2017/01/01') }
     specify { expect(actual('base/path/', '31 Dec 2016')).to eq('base/path/2016/12/31') }
 
