@@ -9,7 +9,7 @@ module Suspect
       end
 
       def foreach
-        storage_file_paths.each do |path|
+        run_info_paths.each do |path|
           file_helper.read(path) do |line|
             yield run_info_from(line)
           end
@@ -20,12 +20,12 @@ module Suspect
 
       attr_reader :base_path, :file_helper
 
-      def storage_file_paths
+      def run_info_paths
         file_helper.file_paths(base_path).select { |p| p.end_with?('.ss') }
       end
 
       def run_info_from(line)
-        data = JSON.parse(line)
+        data = ::JSON.parse(line)
         run_info = ::Suspect::Gathering::RunInfo.new
 
         data.each_key do |k|
