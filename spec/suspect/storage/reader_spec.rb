@@ -7,13 +7,12 @@ RSpec.describe Suspect::Storage::Reader do
     let(:subject) {described_class.new('.', file_helper)}
 
     it 'yields found run_infos' do
-      run_info = ::Suspect::Gathering::RunInfo.new('fake_collector_id')
       allow(file_helper).to receive(:file_paths) {['/path/to/storage/file.ss']}
-      allow(file_helper).to receive(:read).with('/path/to/storage/file.ss').and_yield(run_info.to_json)
+      allow(file_helper).to receive(:read).with('/path/to/storage/file.ss').and_yield("{\"collector_id\":\"fake_id\"}")
 
       yielded = []
       subject.foreach {|i| yielded << i}
-      expect(yielded).to eq([run_info])
+      expect(yielded).to eq([::Suspect::Gathering::RunInfo.new('fake_id')])
     end
 
     it 'does nothing if no storage files found' do

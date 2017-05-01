@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'json'
 
 require_relative './../file_utils/flock_writer'
 
@@ -18,7 +19,7 @@ module Suspect
         dir_helper.mkdir dir_path.expand_path
 
         writer.write filename,
-                     run_info.to_s
+                     serialize(run_info)
       end
 
       private
@@ -27,6 +28,10 @@ module Suspect
 
       def filename
         "#{dir_path.expand_path}/#{collector_id}-#{VERSION}.ss"
+      end
+
+      def serialize(run_info)
+        ::JSON.generate(run_info.to_h)
       end
     end
   end

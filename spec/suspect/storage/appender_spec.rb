@@ -5,14 +5,14 @@ require 'suspect/storage/appender'
 RSpec.describe Suspect::Storage::Appender do
   describe '#append' do
 
-    let(:run_info) { instance_double(::Suspect::Gathering::RunInfo, to_s: 'serialized run info') }
-    let(:writer) { instance_double(::Suspect::FileUtils::FlockWriter) }
-    let(:dir_helper) { instance_double(::Suspect::FileUtils::Idempotent) }
+    let(:run_info) {instance_double(::Suspect::Gathering::RunInfo, to_h: {a_key: 'serialized run info'})}
+    let(:writer) {instance_double(::Suspect::FileUtils::FlockWriter)}
+    let(:dir_helper) {instance_double(::Suspect::FileUtils::Idempotent)}
 
     before { allow(dir_helper).to receive(:mkdir) }
 
     it 'appends serialized run info' do
-      expect(writer).to receive(:write).with anything, 'serialized run info'
+      expect(writer).to receive(:write).with anything, "{\"a_key\":\"serialized run info\"}"
 
       appender = described_class.new(dir_path: pathname('.'), writer: writer, dir_helper: dir_helper, collector_id: 'some id')
       appender.append run_info

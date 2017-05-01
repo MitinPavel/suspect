@@ -1,5 +1,3 @@
-require 'json'
-
 module Suspect
   module Gathering
     ##
@@ -28,14 +26,6 @@ module Suspect
       def initialize(*params)
         super(*params)
         self.version ||= VERSION
-      end
-
-      def to_json
-        JSON.generate(to_h)
-      end
-
-      def to_s
-        to_json
       end
     end
   end
