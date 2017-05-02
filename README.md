@@ -1,8 +1,11 @@
 # Suspect
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/suspect`. To experiment with that code, run `bin/console` for an interactive prompt.
+If you have **slow tests**, you need a troubleshooting strategy. In meantime it is good to have a palliative. `Suspect` provides such a band-aid. The gem collects test results along with VCS (Git) status and use harvested data to select a subset of test files to be run.
 
-TODO: Delete this and the text above, and describe your gem
+## Tags
+
+* Test Smells
+* Slow Tests
 
 ## Installation
 
