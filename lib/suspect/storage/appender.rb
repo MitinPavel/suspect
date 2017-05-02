@@ -27,7 +27,7 @@ module Suspect
       attr_reader :writer, :dir_helper, :dir_path, :collector_id
 
       def filename
-        "#{dir_path.expand_path}/#{collector_id}-#{VERSION}.ss"
+        "#{dir_path.expand_path}/#{collector_id}-#{VERSION}.suspect"
       end
 
       def serialize(run_info)

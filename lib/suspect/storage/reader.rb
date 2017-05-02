@@ -21,7 +21,7 @@ module Suspect
       attr_reader :base_path, :file_helper
 
       def run_info_paths
-        file_helper.file_paths(base_path).select { |p| p.end_with?('.ss') }
+        file_helper.file_paths(base_path).select { |p| p.end_with?('.suspect') }
       end
 
       def run_info_from(line)

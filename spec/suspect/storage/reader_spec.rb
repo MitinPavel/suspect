@@ -7,8 +7,8 @@ RSpec.describe Suspect::Storage::Reader do
     let(:subject) {described_class.new('.', file_helper)}
 
     it 'yields found run_infos' do
-      allow(file_helper).to receive(:file_paths) {['/path/to/storage/file.ss']}
-      allow(file_helper).to receive(:read).with('/path/to/storage/file.ss').and_yield("{\"collector_id\":\"fake_id\"}")
+      allow(file_helper).to receive(:file_paths) {['/path/to/storage/file.suspect']}
+      allow(file_helper).to receive(:read).with('/path/to/storage/file.suspect').and_yield("{\"collector_id\":\"fake_id\"}")
 
       yielded = []
       subject.foreach {|i| yielded << i}
@@ -21,8 +21,8 @@ RSpec.describe Suspect::Storage::Reader do
       subject.foreach {|_| fail 'I should not be called'}
     end
 
-    it "ignores a file if it doesn't end with .ss" do
-      allow(file_helper).to receive(:file_paths) {['/path/to/storage/file.zip']}
+    it "ignores a file if it doesn't end with .suspect" do
+      allow(file_helper).to receive(:file_paths) {['/path/to/storage/file.suspect.zip']}
 
       expect(file_helper).to receive(:read).never
       subject.foreach {|_| fail 'I should not be called'}

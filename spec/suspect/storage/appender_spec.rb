@@ -20,7 +20,7 @@ RSpec.describe Suspect::Storage::Appender do
 
     it 'compose a storage file path concatenating the path, the storage version and the collector id' do
       expect(described_class::VERSION).to eq('1')
-      expect(writer).to receive(:write).with '/a/path/to/store/12345-1.ss', anything
+      expect(writer).to receive(:write).with '/a/path/to/store/12345-1.suspect', anything
 
       appender = described_class.new(dir_path: pathname('/a/path/to/store'), dir_helper: dir_helper, writer: writer, collector_id: '12345')
       appender.append run_info
