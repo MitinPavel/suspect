@@ -56,6 +56,14 @@ end
 * Your project uses:
   * Git
   * RSpec
+  
+## TODO  
+
+* Basic error handling (especially for file operations)
+* Rake task examples in README:
+  * run rspec taking collected data into account
+  * run parallel_tests taking collected data into account
+* More sophisticated strategies for finding test files to be run
 
 ## Development
 
