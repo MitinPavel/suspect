@@ -12,10 +12,12 @@ module Suspect
           without_new_line(client.branch)
         end
 
+        def files
+          lines_to_files(client.files)
+        end
+
         def modified_files
-          client.modified_files.
-              split(/\n/).
-              map { |path| "/#{path}"}
+          lines_to_files(client.modified_files)
         end
 
         def commit_hash
@@ -32,6 +34,11 @@ module Suspect
 
         def without_new_line(str)
           str.sub(/\n\z/, '')
+        end
+
+        #TODO Is the leading '/' necessary?
+        def lines_to_files(multiline_string)
+          multiline_string.split(/\n/).map {|path| "/#{path}"}
         end
       end
     end

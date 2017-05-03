@@ -7,6 +7,7 @@ RSpec.describe Suspect::Prediction::Naive::AllFound do
   describe '#paths' do
     let(:file_tree) do
       instance_double(::Suspect::FileTree::Git::Snapshot,
+                      files: %w(/path/to/a.rb /path/to/b.rb /path/to/c.rb /path/to/y_spec.rb /path/to/z_spec.rb),
                       modified_files: [],
                       commit_hash: 'fake_hash',
                       patch: 'fake_patch')
@@ -43,6 +44,16 @@ RSpec.describe Suspect::Prediction::Naive::AllFound do
 
       actual = described_class.new(run_infos, file_tree).paths
       expect(actual).to be_empty
+    end
+
+    it 'ignores already deleted spec files' do
+      allow(file_tree).to receive(:modified_files) {%w(/path/to/a.rb)}
+      allow(file_tree).to receive(:files) { %w(/path/to/a.rb /path/to/z_spec.rb) }
+      allow(run_infos).to receive(:foreach).and_yield(build_run_info(modified_files: %w(/path/to/a.rb),
+                                                                     failed_files: %w(/path/to/y_spec.rb /path/to/z_spec.rb)))
+
+      actual = described_class.new(run_infos, file_tree).paths
+      expect(actual).to_not include('/path/to/y_spec.rb')
     end
 
     def build_run_info(members = {})

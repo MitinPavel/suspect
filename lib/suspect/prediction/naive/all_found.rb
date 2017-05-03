@@ -17,7 +17,7 @@ module Suspect
             end
           end
 
-          result.uniq
+          select_existing_files(result.uniq)
         end
 
         def match?(first_array, second_array)
@@ -30,6 +30,10 @@ module Suspect
 
         def modified_files
           @modified_files ||= file_tree.modified_files
+        end
+
+        def select_existing_files(files)
+          files & file_tree.files
         end
       end
     end

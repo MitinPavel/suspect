@@ -13,6 +13,15 @@ RSpec.describe Suspect::FileTree::Git::Snapshot do
     end
   end
 
+  describe '#files' do
+    it 'returns an array of file paths' do
+      allow(git_client).to receive(:files) { "path/to/a.rb\npath/to/a_spec.rb\n" }
+
+      snapshot = described_class.new(git_client)
+      expect(snapshot.files).to match_array(%w(/path/to/a.rb /path/to/a_spec.rb))
+    end
+  end
+
   describe '#modified_files' do
     it 'returns an empty array if no modified files' do
       snapshot = described_class.new(git_client)

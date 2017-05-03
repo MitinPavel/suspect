@@ -6,8 +6,12 @@ module Suspect
           `git rev-parse --abbrev-ref HEAD`
         end
 
+        def files
+          `git ls-files --full-name`
+        end
+
         def modified_files
-          `git ls-files --modified --full-name`
+          `git ls-files --full-name --modified`
         end
 
         def commit_hash
