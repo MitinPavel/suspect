@@ -36,9 +36,8 @@ module Suspect
           str.sub(/\n\z/, '')
         end
 
-        #TODO Is the leading '/' necessary?
         def lines_to_files(multiline_string)
-          multiline_string.split(/\n/).map {|path| "/#{path}"}
+          multiline_string.split(/\n/).map {|path| "./#{path}"}
         end
       end
     end
