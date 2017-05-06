@@ -18,6 +18,8 @@ module Suspect
         end
 
         result
+      rescue Errno::ENOENT # No such file or directory.
+        []
       end
 
       def read(path, &block)
