@@ -1,11 +1,15 @@
 # Suspect
 
-If you have **slow tests**, you need a troubleshooting strategy. In meantime it is good to have a palliative. `Suspect` provides such a band-aid. The gem collects test results along with VCS (Git) status and use harvested data to select a subset of test files to be run.
+If you have **slow tests**, you need a troubleshooting strategy. It takes a lot of effort to get rid of this smell. In meantime it is good to have a palliative. `Suspect` provides such a band-aid. The gem collects test results along with VCS (Git) status and use harvested data to select a subset of test files to be run.
 
 ## Tags
 
 * Test Smells
 * Slow Tests
+* RSpec
+* TDD
+* BDD
+* Anti-patterns
 
 ## Installation
 
@@ -23,12 +27,7 @@ Or install it yourself as:
 
     $ gem install suspect
 
-## Usage
-
-```ruby
-# Gemfile
-gem 'suspect', :path => '/home/pm/projects/suspect'
-```
+Add to RSpec helper file:
 
 ```ruby
 # spec/spec_helper.rb
@@ -37,33 +36,53 @@ require 'suspect/rspec_listener'
 RSpec.configure do |config|
 
   ::Suspect::RSpecListener.setup_using config
-  
-  # ...
-end  
+
 ```
+
+Create a rake file:
 
 ```ruby
 # lib/tasks/suspect.rake
 
 namespace :suspect do
-  desc 'List suspect test files'
-  task :list do |t, args|
-    #...
+  desc 'run suspect test files in parallel'
+  task :parallel_rspec do
+    paths = ::Suspect::Prediction::Default.paths
+    
+    if paths.any?
+      puts "#{paths.size} test file(s) are going to be run..."
+      puts `bundle exec parallel_rspec #{paths.join(' ')} -n 7`
+    else
+      puts 'No test files found to be run'
+    end
   end
 end
-
 ```
+
+## Usage
+
+`Suspect` is conceptually divided into two parts:
+* data gathering
+* failure prediction
+
+### Gathering
+
+As soon as the gem is added to Gemfile and `Suspect::RSpecListener.setup_using config` is invoked in `spec/spec_helper.rb`, the gathering part is up and running. Each time you run specs, results are stored for further usage. Harvested data is stored under `suspect/` folder in *.suspect files. Adding *.suspect files under source control allows data sharing between project members.
+
+## Prediction
+
+`Suspect::Prediction::Default.paths` returns a list of spec files which are more likely to fall. The installation section above contains a simple rake task for the prediction phase. Fill free to modify the task to better meet your requirements.
 
 ## Assumptions
 
-* Your project uses:
+* A project uses:
   * Git
   * RSpec
   
 ## TODO  
 
 * Basic error handling (especially for file operations)
-* Rake task examples in README:
+* Enhanced Rake task examples in README:
   * run rspec taking collected data into account
   * run parallel_tests taking collected data into account
 * More sophisticated strategies for finding test files to be run
