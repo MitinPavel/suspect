@@ -69,7 +69,7 @@ end
 
 As soon as the gem is added to Gemfile and `Suspect::RSpecListener.setup_using config` is invoked in `spec/spec_helper.rb`, the gathering part is up and running. Each time you run specs, results are stored for further usage. Harvested data is stored under `suspect/` folder in *.suspect files. Adding *.suspect files under source control allows data sharing between project members.
 
-## Prediction
+### Prediction
 
 `Suspect::Prediction::Default.paths` returns a list of spec files which are more likely to fall. The installation section above contains a simple rake task for the prediction phase. Fill free to modify the task to better meet your requirements.
 
