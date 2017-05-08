@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/MitinPavel/suspect.svg?branch=master)](https://travis-ci.org/MitinPavel/suspect)
+
 # Suspect
 
 If you have **slow tests**, you need a troubleshooting strategy. It takes a lot of effort to get rid of this smell. In meantime it is good to have a palliative. `Suspect` provides such a band-aid. The gem collects test results along with VCS (Git) status and uses harvested data to select a subset of test files to be run.
