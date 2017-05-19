@@ -27,6 +27,8 @@ module Suspect
     end
 
     def register_listener(reporter)
+      return unless supported_platform?
+
       root_path = ::Pathname.new('.')
       file_helper = ::Suspect::FileUtils::Idempotent.new
       structure = ::Suspect::Setup::Structure.new(root_path)
@@ -40,6 +42,12 @@ module Suspect
       listener = ::Suspect::Gathering::RSpec::Listener.new(file_tree, storage, collector_id, ::Time.now.utc)
 
       reporter.register_listener listener, *listener.notification_names
+    end
+
+    private
+
+    def supported_platform?
+      ::Gem::Platform.local.os == 'linux'
     end
   end
 end
